@@ -69,7 +69,10 @@ public class OptionsMenu : MonoBehaviour
         bool newSequence =
             currentSettings.processCount != SimulationManager.Instance.simulationSettings.processCount ||
             currentSettings.sequenceLength != SimulationManager.Instance.simulationSettings.sequenceLength;
-
+        bool rerunSimulation =
+            currentSettings.memorySize != SimulationManager.Instance.simulationSettings.memorySize ||
+            currentSettings.processCount != SimulationManager.Instance.simulationSettings.processCount ||
+            currentSettings.sequenceLength != SimulationManager.Instance.simulationSettings.sequenceLength;
 
         SimulationManager.Instance.SetSimulationSettings(currentSettings);
 
@@ -77,7 +80,10 @@ public class OptionsMenu : MonoBehaviour
         {
             SimulationManager.Instance.GenerateNewSequence();
         }
-        SimulationManager.Instance.RunSimulation();
+        if (rerunSimulation)
+        {
+            SimulationManager.Instance.RunSimulation();
+        }
 
         SimulationManager.Instance.Rewind();
         Hide();
