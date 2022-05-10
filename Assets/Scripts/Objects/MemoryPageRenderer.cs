@@ -9,6 +9,8 @@ public class MemoryPageRenderer : MonoBehaviour
 
     public Color nullPageColor;
 
+    public int maxTextureSize = 2048;
+
     private void Awake()
     {
         pagesMaterial = pagesRenderer.material;
@@ -32,7 +34,16 @@ public class MemoryPageRenderer : MonoBehaviour
             CreateTexture(pages.Length);
 
         for (int i = 0; i < pages.Length; i++)
-            pagesTexture.SetPixel(0, i, GetPageColor(pages[i]));
+        {
+            if (pages.Length > maxTextureSize)
+            {
+                pagesTexture.SetPixel(0, (int)Mathf.Lerp(0, maxTextureSize, (float)i / pages.Length), GetPageColor(pages[i]));
+            }
+            else
+            {
+                pagesTexture.SetPixel(0, i, GetPageColor(pages[i]));
+            }
+        }
         pagesTexture.Apply();
 
         pagesMaterial.mainTexture = pagesTexture;
@@ -41,7 +52,7 @@ public class MemoryPageRenderer : MonoBehaviour
     public void CreateTexture(int size)
     {
         pagesTexture = null;
-        pagesTexture = new Texture2D(1, size, TextureFormat.RGBA32, false)
+        pagesTexture = new Texture2D(1, Mathf.Min(size, maxTextureSize), TextureFormat.RGBA32, false)
         {
             filterMode = FilterMode.Point
         };
