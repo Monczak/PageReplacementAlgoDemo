@@ -69,7 +69,9 @@ public class SimulationManager : MonoBehaviour
             memorySize = 10,
             processCount = 50,
             sequenceLength = 150,
-            simulationSpeed = 1f
+            generationPattern = SequenceGenerationPattern.Random,
+            shuffleRatio = 0f,
+            simulationSpeed = 1f,
         };
     }
 
