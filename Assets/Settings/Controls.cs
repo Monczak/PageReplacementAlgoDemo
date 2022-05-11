@@ -25,6 +25,14 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Step"",
+                    ""type"": ""Button"",
+                    ""id"": ""c42b3aff-f5ac-413a-9cf3-c1e17c2b544f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -38,6 +46,17 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""Mouse Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dbd0ee80-16b2-40ec-9db3-58922b363065"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Step"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -47,6 +66,7 @@ public class @Controls : IInputActionCollection, IDisposable
         // Global
         m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
         m_Global_MousePosition = m_Global.FindAction("Mouse Position", throwIfNotFound: true);
+        m_Global_Step = m_Global.FindAction("Step", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -97,11 +117,13 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Global;
     private IGlobalActions m_GlobalActionsCallbackInterface;
     private readonly InputAction m_Global_MousePosition;
+    private readonly InputAction m_Global_Step;
     public struct GlobalActions
     {
         private @Controls m_Wrapper;
         public GlobalActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @MousePosition => m_Wrapper.m_Global_MousePosition;
+        public InputAction @Step => m_Wrapper.m_Global_Step;
         public InputActionMap Get() { return m_Wrapper.m_Global; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -114,6 +136,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @MousePosition.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnMousePosition;
                 @MousePosition.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnMousePosition;
                 @MousePosition.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnMousePosition;
+                @Step.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnStep;
+                @Step.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnStep;
+                @Step.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnStep;
             }
             m_Wrapper.m_GlobalActionsCallbackInterface = instance;
             if (instance != null)
@@ -121,6 +146,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
+                @Step.started += instance.OnStep;
+                @Step.performed += instance.OnStep;
+                @Step.canceled += instance.OnStep;
             }
         }
     }
@@ -128,5 +156,6 @@ public class @Controls : IInputActionCollection, IDisposable
     public interface IGlobalActions
     {
         void OnMousePosition(InputAction.CallbackContext context);
+        void OnStep(InputAction.CallbackContext context);
     }
 }

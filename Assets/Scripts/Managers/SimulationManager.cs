@@ -129,6 +129,16 @@ public class SimulationManager : MonoBehaviour
         playing = false;
     }
 
+    public void StepForward()
+    {
+        currentTime++;
+    }
+
+    public void StepBack()
+    {
+        currentTime--;
+    }
+
     private void UpdateTime()
     {
         currentTime += playingSpeed * simulationSettings.simulationSpeed * Time.deltaTime;

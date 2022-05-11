@@ -12,10 +12,30 @@ public class UIManager : MonoBehaviour
     public OptionsMenu optionsMenu;
     public bool showOptionsMenu;
 
+    private Controls controls;
+    private bool step;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
         if (Instance != this) Destroy(gameObject);
+
+        controls = new Controls();
+
+        controls.Global.Step.performed += OnStepKeyPressed;
+        controls.Global.Step.canceled += OnStepKeyReleased;
+
+        controls.Enable();
+    }
+
+    private void OnStepKeyReleased(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        step = false;
+    }
+
+    private void OnStepKeyPressed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        step = true;
     }
 
     private void Update()
@@ -46,12 +66,26 @@ public class UIManager : MonoBehaviour
 
     public void OnReverseButtonPressed()
     {
-        SimulationManager.Instance.PlayBackward();
+        if (step)
+        {
+            if (SimulationManager.Instance.IsPlaying() && SimulationManager.Instance.GetPlayingSpeed() > 0)
+                SimulationManager.Instance.Pause();
+            SimulationManager.Instance.StepBack();
+        }
+        else
+            SimulationManager.Instance.PlayBackward();
     }
 
     public void OnPlayButtonPressed()
     {
-        SimulationManager.Instance.PlayForward();
+        if (step)
+        {
+            if (SimulationManager.Instance.IsPlaying() && SimulationManager.Instance.GetPlayingSpeed() < 0)
+                SimulationManager.Instance.Pause();
+            SimulationManager.Instance.StepForward();
+        }
+        else
+            SimulationManager.Instance.PlayForward();
     }
 
     public void OnRewindButtonPressed()
