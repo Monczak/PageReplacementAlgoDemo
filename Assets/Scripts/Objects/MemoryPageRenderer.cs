@@ -7,7 +7,7 @@ public class MemoryPageRenderer : MonoBehaviour
 
     private Material pagesMaterial;
 
-    public Color nullPageColor;
+    public static Color nullPageColor = new Color(20f / 255, 20f / 255, 20f / 255);
 
     public int maxTextureSize = 2048;
 
@@ -58,5 +58,5 @@ public class MemoryPageRenderer : MonoBehaviour
         };
     }
 
-    private Color GetPageColor(MemoryPage page) => page == MemoryPage.NullPage ? nullPageColor : Color.HSVToRGB((float)page.index / SimulationManager.Instance.simulationSettings.sequenceLength, 0.85f, 0.95f);
+    public static Color GetPageColor(MemoryPage page) => page == MemoryPage.NullPage ? nullPageColor : Color.HSVToRGB((float)page.index / SimulationManager.Instance.simulationSettings.sequenceLength, 0.85f, 0.95f);
 }

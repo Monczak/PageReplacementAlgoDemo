@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +13,10 @@ public class UIManager : MonoBehaviour
     [Header("Options Menu")]
     public OptionsMenu optionsMenu;
     public bool showOptionsMenu;
+
+    [Header("HUD")]
+    public TMP_Text currentTimeText;
+    public Image currentColorImage;
 
     private Controls controls;
     private bool step;
@@ -41,6 +47,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         UpdateActivityMarkers();
+        UpdateHUD();
 
         SimulationManager.Instance.cameraMovement.panDown = showOptionsMenu;
     }
@@ -49,6 +56,12 @@ public class UIManager : MonoBehaviour
     {
         reverseMarker.active = SimulationManager.Instance.IsPlaying() && SimulationManager.Instance.GetPlayingSpeed() < 0;
         playMarker.active = SimulationManager.Instance.IsPlaying() && SimulationManager.Instance.GetPlayingSpeed() > 0;
+    }
+
+    private void UpdateHUD()
+    {
+        currentTimeText.text = $"{(int)SimulationManager.Instance.currentTime} / {SimulationManager.Instance.simulationSettings.sequenceLength}";
+        currentColorImage.color = MemoryPageRenderer.GetPageColor(new MemoryPage { index = (int)SimulationManager.Instance.currentTime });
     }
 
     public void OnMenuButtonPressed()
